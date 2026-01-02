@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chipta qidirish - Online Chipta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-home"></i> Bosh sahifa
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow fade-in">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0"><i class="fas fa-search"></i> Avtobus chiptalarini qidirish</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="searchForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="from" class="form-label">Qayerdan</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </span>
+                                        <select class="form-select" id="from" required>
+                                            <option value="">Shaharni tanlang</option>
+                                            <option value="Toshkent">Toshkent</option>
+                                            <option value="Samarqand">Samarqand</option>
+                                            <option value="Buxoro">Buxoro</option>
+                                            <option value="Xiva">Xiva</option>
+                                            <option value="Urganch">Urganch</option>
+                                            <option value="Navoiy">Navoiy</option>
+                                            <option value="Andijon">Andijon</option>
+                                            <option value="Farg'ona">Farg'ona</option>
+                                            <option value="Namangan">Namangan</option>
+                                            <option value="Qarshi">Qarshi</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="to" class="form-label">Qayerga</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </span>
+                                        <select class="form-select" id="to" required>
+                                            <option value="">Shaharni tanlang</option>
+                                            <option value="Toshkent">Toshkent</option>
+                                            <option value="Samarqand">Samarqand</option>
+                                            <option value="Buxoro">Buxoro</option>
+                                            <option value="Xiva">Xiva</option>
+                                            <option value="Urganch">Urganch</option>
+                                            <option value="Navoiy">Navoiy</option>
+                                            <option value="Andijon">Andijon</option>
+                                            <option value="Farg'ona">Farg'ona</option>
+                                            <option value="Namangan">Namangan</option>
+                                            <option value="Qarshi">Qarshi</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="date" class="form-label">Sana</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        <input type="date" class="form-control" id="date" required 
+                                               min="<?php echo date('Y-m-d'); ?>">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="passengers" class="form-label">Yo'lovchilar soni</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-users"></i>
+                                        </span>
+                                        <select class="form-select" id="passengers">
+                                            <option value="1">1 yo'lovchi</option>
+                                            <option value="2" selected>2 yo'lovchi</option>
+                                            <option value="3">3 yo'lovchi</option>
+                                            <option value="4">4 yo'lovchi</option>
+                                            <option value="5">5 yo'lovchi</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-search"></i> Avtobuslarni qidirish
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Natijalar -->
+                        <div class="mt-5" id="searchResults" style="display: none;">
+                            <h5 class="border-bottom pb-2">Topilgan avtobuslar:</h5>
+                            <div id="resultsContainer"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mashhur yo'nalishlar -->
+                <div class="card mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-fire"></i> Mashhur yo'nalishlar</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <a href="#" class="btn btn-outline-primary w-100 quick-search" 
+                                   data-from="Toshkent" data-to="Samarqand">
+                                    Toshkent → Samarqand
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="#" class="btn btn-outline-primary w-100 quick-search"
+                                   data-from="Toshkent" data-to="Buxoro">
+                                    Toshkent → Buxoro
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="#" class="btn btn-outline-primary w-100 quick-search"
+                                   data-from="Samarqand" data-to="Buxoro">
+                                    Samarqand → Buxoro
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="#" class="btn btn-outline-primary w-100 quick-search"
+                                   data-from="Buxoro" data-to="Xiva">
+                                    Buxoro → Xiva
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Bugungi sana
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = today;
+        document.getElementById('date').min = today;
+        
+        // Form submit
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const date = document.getElementById('date').value;
+            const passengers = document.getElementById('passengers').value;
+            
+            if (from === to) {
+                alert('Boshlang\'ich va tugash nuqtalari bir xil bo\'lmasligi kerak!');
+                return;
+            }
+            
+            // Avtobuslarni qidirish
+            const buses = Storage.searchBuses(from, to, date);
+            
+            // Natijalarni ko'rsatish
+            const resultsContainer = document.getElementById('resultsContainer');
+            const searchResults = document.getElementById('searchResults');
+            
+            if (buses.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Uzr, tanlangan sana va yo'nalish bo'yicha avtobus topilmadi.
+                    </div>
+                `;
+            } else {
+                resultsContainer.innerHTML = '';
+                buses.forEach(bus => {
+                    const card = document.createElement('div');
+                    card.className = 'card mb-3';
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5 class="card-title">${bus.from} → ${bus.to}</h5>
+                                    <p class="card-text">
+                                        <i class="fas fa-clock"></i> <strong>${bus.departureTime}</strong> dan 
+                                        <i class="fas fa-clock"></i> ${bus.arrivalTime} gacha<br>
+                                        <i class="fas fa-bus"></i> ${bus.busNumber} | ${bus.busType}<br>
+                                        <i class="fas fa-chair"></i> ${bus.availableSeats} ta joy bor<br>
+                                        <i class="fas fa-building"></i> ${bus.company || 'Noma\'lum kompaniya'}
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <h4 class="text-success">${bus.price.toLocaleString()} so'm</h4>
+                                    <p class="text-muted">1 kishi uchun</p>
+                                    <a href="buses.html?id=${bus.id}&passengers=${passengers}" 
+                                       class="btn btn-primary">
+                                        <i class="fas fa-ticket-alt"></i> Bron qilish
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+            }
+            
+            searchResults.style.display = 'block';
+            searchResults.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Tez qidirish tugmalari
+        document.querySelectorAll('.quick-search').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const from = this.getAttribute('data-from');
+                const to = this.getAttribute('data-to');
+                
+                document.getElementById('from').value = from;
+                document.getElementById('to').value = to;
+                
+                // Formni avtomatik submit qilish
+                document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+            });
+        });
+        
+        // Shaharlarni moslashtirish
+        const fromSelect = document.getElementById('from');
+        const toSelect = document.getElementById('to');
+        
+        fromSelect.addEventListener('change', function() {
+            const selectedFrom = this.value;
+            
+            // Barcha variantlarni faollashtirish
+            Array.from(toSelect.options).forEach(option => {
+                option.disabled = false;
+            });
+            
+            // Tanlangan shaharni o'chirib qo'yish
+            if (selectedFrom) {
+                Array.from(toSelect.options).forEach(option => {
+                    if (option.value === selectedFrom) {
+                        option.disabled = true;
+                    }
+                });
+            }
+        });
+        
+        toSelect.addEventListener('change', function() {
+            const selectedTo = this.value;
+            
+            // Barcha variantlarni faollashtirish
+            Array.from(fromSelect.options).forEach(option => {
+                option.disabled = false;
+            });
+            
+            // Tanlangan shaharni o'chirib qo'yish
+            if (selectedTo) {
+                Array.from(fromSelect.options).forEach(option => {
+                    if (option.value === selectedTo) {
+                        option.disabled = true;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro'yxatdan o'tish - Online Chipta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow fade-in">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-user-plus"></i> Ro'yxatdan o'tish</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">To'liq ism</label>
+                                <input type="text" class="form-control" id="name" required 
+                                       placeholder="Ali Valiyev">
+                                <div class="form-text">Ismingizni kiriting</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email manzil</label>
+                                <input type="email" class="form-control" id="email" required
+                                       placeholder="ali@example.com">
+                                <div class="form-text">Faol email manzilingizni kiriting</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Telefon raqam</label>
+                                <input type="tel" class="form-control" id="phone" required
+                                       placeholder="+998901112233" pattern="^\+998\d{9}$">
+                                <div class="form-text">Format: +998901112233</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Parol</label>
+                                <input type="password" class="form-control" id="password" required
+                                       minlength="6">
+                                <div class="form-text">Kamida 6 belgidan iborat bo'lsin</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Parolni tasdiqlash</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">
+                                        Foydalanish shartlari
+                                    </a> bilan tanishdim va roziman
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus"></i> Ro'yxatdan o'tish
+                                </button>
+                                <a href="login.html" class="btn btn-outline-secondary">
+                                    <i class="fas fa-sign-in-alt"></i> Kirish sahifasiga qaytish
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p class="mb-0">Allaqachon hisobingiz bormi? 
+                            <a href="login.html">Kirish</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Foydalanish shartlari</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>1. Foydalanuvchi tomonidan kiritilgan barcha ma'lumotlar to'g'ri va aniq bo'lishi shart.</p>
+                    <p>2. Parolni boshqa shaxslar bilan ulashish mumkin emas.</p>
+                    <p>3. Tizimdan noqonuniy maqsadlarda foydalanish taqiqlanadi.</p>
+                    <p>4. Barcha bron qilishlar foydalanuvchi javobgarligida amalga oshiriladi.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Parollarni solishtirish
+            if (password !== confirmPassword) {
+                alert('Parollar mos kelmadi!');
+                return;
+            }
+            
+            try {
+                const userData = { name, email, phone, password };
+                Auth.register(userData);
+                alert('Muvaffaqiyatli ro\'yxatdan o\'tdingiz!');
+                window.location.href = 'profile.html';
+            } catch (error) {
+                alert('Xato: ' + error.message);
+            }
+        });
+        
+        // Telefon raqam formati
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.startsWith('998')) {
+                value = '+' + value;
+            } else if (value.startsWith('9')) {
+                value = '+998' + value;
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

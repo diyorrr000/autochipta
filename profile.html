@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mening profilm - Online Chipta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="search.html">
+                    <i class="fas fa-search"></i> Qidirish
+                </a>
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-home"></i> Bosh sahifa
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-3">
+                <!-- User Profile Sidebar -->
+                <div class="card shadow mb-4">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <div class="avatar-circle bg-primary text-white d-inline-flex align-items-center justify-content-center rounded-circle" 
+                                 style="width: 80px; height: 80px; font-size: 2rem;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <h4 id="userName">Yuklanmoqda...</h4>
+                        <p class="text-muted" id="userEmail"></p>
+                        <div class="mt-3">
+                            <span class="badge bg-success" id="userRole"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <div class="card shadow">
+                    <div class="list-group list-group-flush">
+                        <a href="#bookings" class="list-group-item list-group-item-action active" data-bs-toggle="tab">
+                            <i class="fas fa-ticket-alt me-2"></i> Mening chiptalarim
+                        </a>
+                        <a href="#profileInfo" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                            <i class="fas fa-user-circle me-2"></i> Profil ma'lumotlari
+                        </a>
+                        <a href="#settings" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                            <i class="fas fa-cog me-2"></i> Sozlamalar
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action text-danger" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt me-2"></i> Chiqish
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Statistics -->
+                <div class="card shadow mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0"><i class="fas fa-chart-bar"></i> Statistikalar</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h2 id="totalBookings">0</h2>
+                            <p class="text-muted">Jami bronlar</p>
+                        </div>
+                        <div class="text-center">
+                            <h4 id="totalSpent">0 so'm</h4>
+                            <p class="text-muted">Jami sarflangan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-9">
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Bookings Tab -->
+                    <div class="tab-pane fade show active" id="bookings">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0"><i class="fas fa-ticket-alt"></i> Mening chiptalarim</h4>
+                                    <button class="btn btn-sm btn-light" id="refreshBookings">
+                                        <i class="fas fa-redo"></i> Yangilash
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="searchBookings" 
+                                               placeholder="Chipta ID yoki marshrut bo'yicha qidirish...">
+                                        <button class="btn btn-outline-primary">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div id="bookingsList">
+                                    <div class="text-center py-5">
+                                        <div class="loading"></div>
+                                        <p class="mt-2">Chiptalar yuklanmoqda...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Info Tab -->
+                    <div class="tab-pane fade" id="profileInfo">
+                        <div class="card shadow">
+                            <div class="card-header bg-success text-white">
+                                <h4 class="mb-0"><i class="fas fa-user-circle"></i> Profil ma'lumotlari</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="profileForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileName" class="form-label">To'liq ism</label>
+                                            <input type="text" class="form-control" id="profileName" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileEmail" class="form-label">Email manzil</label>
+                                            <input type="email" class="form-control" id="profileEmail" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profilePhone" class="form-label">Telefon raqam</label>
+                                            <input type="tel" class="form-control" id="profilePhone" 
+                                                   pattern="^\+998\d{9}$">
+                                            <div class="form-text">Format: +998901112233</div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileBirthdate" class="form-label">Tug'ilgan sana</label>
+                                            <input type="date" class="form-control" id="profileBirthdate">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="profileAddress" class="form-label">Manzil</label>
+                                        <textarea class="form-control" id="profileAddress" rows="2"></textarea>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Jins</label>
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gender" id="genderMale" value="male">
+                                                <label class="form-check-label" for="genderMale">Erkak</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="female">
+                                                <label class="form-check-label" for="genderFemale">Ayol</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> O'zgarishlarni saqlash
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings Tab -->
+                    <div class="tab-pane fade" id="settings">
+                        <div class="card shadow">
+                            <div class="card-header bg-warning text-dark">
+                                <h4 class="mb-0"><i class="fas fa-cog"></i> Sozlamalar</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="settingsForm">
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-bell"></i> Bildirishnomalar</h5>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="notifyEmail" checked>
+                                            <label class="form-check-label" for="notifyEmail">
+                                                Email orqali bildirishnomalar
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" id="notifySMS" checked>
+                                            <label class="form-check-label" for="notifySMS">
+                                                SMS bildirishnomalar
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="notifyPromo" checked>
+                                            <label class="form-check-label" for="notifyPromo">
+                                                Aksiya va takliflar
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-lock"></i> Xavfsizlik</h5>
+                                        <div class="mb-3">
+                                            <label for="currentPassword" class="form-label">Joriy parol</label>
+                                            <input type="password" class="form-control" id="currentPassword">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="newPassword" class="form-label">Yangi parol</label>
+                                            <input type="password" class="form-control" id="newPassword">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="confirmNewPassword" class="form-label">Yangi parolni tasdiqlash</label>
+                                            <input type="password" class="form-control" id="confirmNewPassword">
+                                        </div>
+                                        <button type="button" class="btn btn-outline-warning" id="changePasswordBtn">
+                                            Parolni o'zgartirish
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h5><i class="fas fa-trash-alt"></i> Hisobni boshqarish</h5>
+                                        <div class="alert alert-danger">
+                                            <h6><i class="fas fa-exclamation-triangle"></i> Diqqat!</h6>
+                                            <p>Hisobingizni o'chirib tashlasangiz, barcha ma'lumotlaringiz butunlay yo'q qilinadi. Bu amalni bekor qilib bo'lmaydi.</p>
+                                            <button type="button" class="btn btn-danger btn-sm" id="deleteAccountBtn">
+                                                <i class="fas fa-trash"></i> Hisobni o'chirish
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <!-- Cancel Booking Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Bronni bekor qilish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Haqiqatan ham bronni bekor qilmoqchimisiz?</p>
+                    <p><strong>Chipta ID:</strong> <span id="cancelTicketId"></span></p>
+                    <p><strong>Marshrut:</strong> <span id="cancelRoute"></span></p>
+                    <p><strong>Sana:</strong> <span id="cancelDate"></span></p>
+                    <div class="alert alert-danger small">
+                        <i class="fas fa-info-circle"></i> Eslatma: Bekor qilingan chiptalar uchun to'lov qaytarilmaydi.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelBtn">Ha, bekor qilish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let currentUser = null;
+        let allBookings = [];
+        let currentBookingToCancel = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Foydalanuvchi tekshiruvi
+            if (!Auth.isAuthenticated()) {
+                alert('Iltimos, avval tizimga kiring!');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = Auth.getCurrentUser();
+            loadUserProfile();
+            loadBookings();
+            setupEventListeners();
+        });
+        
+        function loadUserProfile() {
+            // Foydalanuvchi ma'lumotlarini ko'rsatish
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'Foydalanuvchi';
+            
+            // Profil formani to'ldirish
+            document.getElementById('profileName').value = currentUser.name;
+            document.getElementById('profileEmail').value = currentUser.email;
+            document.getElementById('profilePhone').value = currentUser.phone || '';
+            
+            // Qo'shimcha ma'lumotlar
+            const userDetails = JSON.parse(localStorage.getItem(`userDetails_${currentUser.id}`)) || {};
+            document.getElementById('profileBirthdate').value = userDetails.birthdate || '';
+            document.getElementById('profileAddress').value = userDetails.address || '';
+            
+            if (userDetails.gender) {
+                document.getElementById(`gender${userDetails.gender.charAt(0).toUpperCase() + userDetails.gender.slice(1)}`).checked = true;
+            }
+            
+            // Sozlamalarni to'ldirish
+            const userSettings = JSON.parse(localStorage.getItem(`userSettings_${currentUser.id}`)) || {
+                notifyEmail: true,
+                notifySMS: true,
+                notifyPromo: true
+            };
+            
+            document.getElementById('notifyEmail').checked = userSettings.notifyEmail;
+            document.getElementById('notifySMS').checked = userSettings.notifySMS;
+            document.getElementById('notifyPromo').checked = userSettings.notifyPromo;
+        }
+        
+        function loadBookings() {
+            const bookings = Storage.getBookings();
+            const buses = Storage.getBuses();
+            
+            // Foydalanuvchining bronlarini filtrlash
+            allBookings = bookings.filter(booking => booking.userId === currentUser.id);
+            
+            // Statistikani hisoblash
+            let totalSpent = 0;
+            allBookings.forEach(booking => {
+                totalSpent += booking.totalPrice;
+            });
+            
+            document.getElementById('totalBookings').textContent = allBookings.length;
+            document.getElementById('totalSpent').textContent = totalSpent.toLocaleString() + ' so\'m';
+            
+            // Bronlarni ko'rsatish
+            displayBookings(allBookings, buses);
+        }
+        
+        function displayBookings(bookings, buses) {
+            const bookingsList = document.getElementById('bookingsList');
+            
+            if (bookings.length === 0) {
+                bookingsList.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-ticket-alt fa-4x text-muted mb-3"></i>
+                        <h5>Hozircha chiptalar yo'q</h5>
+                        <p class="text-muted">Siz hali birorta ham chipta bron qilmagansiz.</p>
+                        <a href="search.html" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Chipta qidirish
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Bronlarni saralash (eng yangisi birinchi)
+            bookings.sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate));
+            
+            bookingsList.innerHTML = '';
+            bookings.forEach(booking => {
+                const bus = buses.find(b => b.id === booking.busId);
+                if (!bus) return;
+                
+                const bookingDate = new Date(booking.bookingDate);
+                const travelDate = new Date(bus.date);
+                
+                // Chipta holati
+                let statusBadge = '';
+                let statusClass = '';
+                if (booking.status === 'confirmed') {
+                    if (travelDate > new Date()) {
+                        statusBadge = '<span class="badge bg-success">Faol</span>';
+                        statusClass = 'active';
+                    } else {
+                        statusBadge = '<span class="badge bg-secondary">Yakunlangan</span>';
+                        statusClass = 'completed';
+                    }
+                } else if (booking.status === 'cancelled') {
+                    statusBadge = '<span class="badge bg-danger">Bekor qilingan</span>';
+                    statusClass = 'cancelled';
+                }
+                
+                const bookingCard = document.createElement('div');
+                bookingCard.className = `card mb-3 booking-card ${statusClass}`;
+                bookingCard.innerHTML = `
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h5 class="card-title mb-1">${bus.from} → ${bus.to}</h5>
+                                        <p class="card-text text-muted small mb-0">
+                                            <i class="fas fa-ticket-alt"></i> Chipta ID: ${booking.ticketId}
+                                        </p>
+                                    </div>
+                                    ${statusBadge}
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-4">
+                                        <p class="mb-1">
+                                            <i class="fas fa-calendar"></i> <strong>Sana</strong>
+                                        </p>
+                                        <p class="text-muted small">${bus.date}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="mb-1">
+                                            <i class="fas fa-clock"></i> <strong>Vaqt</strong>
+                                        </p>
+                                        <p class="text-muted small">${bus.departureTime}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="mb-1">
+                                            <i class="fas fa-chair"></i> <strong>O'rindiqlar</strong>
+                                        </p>
+                                        <p class="text-muted small">${booking.seats.join(', ')}</p>
+                                    </div>
+                                </div>
+                                
+                                <p class="mb-0 mt-2">
+                                    <i class="fas fa-bus"></i> ${bus.busNumber} | 
+                                    <i class="fas fa-building"></i> ${bus.company || 'Online Chipta'}
+                                </p>
+                            </div>
+                            
+                            <div class="col-md-4 text-end">
+                                <div class="mb-3">
+                                    <h4 class="text-success">${booking.totalPrice.toLocaleString()} so'm</h4>
+                                    <small class="text-muted">
+                                        ${bookingDate.toLocaleDateString('uz-UZ')} bron qilindi
+                                    </small>
+                                </div>
+                                
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-primary btn-sm view-ticket" 
+                                            data-booking-id="${booking.id}">
+                                        <i class="fas fa-eye"></i> Ko'rish
+                                    </button>
+                                    ${travelDate > new Date() && booking.status === 'confirmed' ? `
+                                        <button class="btn btn-outline-danger btn-sm cancel-booking" 
+                                                data-booking-id="${booking.id}">
+                                            <i class="fas fa-times"></i> Bekor qilish
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                bookingsList.appendChild(bookingCard);
+            });
+            
+            // Event listener'lar
+            document.querySelectorAll('.view-ticket').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const bookingId = this.getAttribute('data-booking-id');
+                    viewTicketDetails(bookingId);
+                });
+            });
+            
+            document.querySelectorAll('.cancel-booking').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const bookingId = this.getAttribute('data-booking-id');
+                    showCancelModal(bookingId);
+                });
+            });
+        }
+        
+        function setupEventListeners() {
+            // Chiqish
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                Auth.logout();
+                window.location.href = 'index.html';
+            });
+            
+            // Profilni yangilash
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userDetails = {
+                    name: document.getElementById('profileName').value,
+                    phone: document.getElementById('profilePhone').value,
+                    birthdate: document.getElementById('profileBirthdate').value,
+                    address: document.getElementById('profileAddress').value,
+                    gender: document.querySelector('input[name="gender"]:checked')?.value || ''
+                };
+                
+                // Joriy foydalanuvchini yangilash
+                const users = Storage.getUsers();
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex].name = userDetails.name;
+                    users[userIndex].phone = userDetails.phone;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Current user ni yangilash
+                    currentUser = users[userIndex];
+                    Auth.setCurrentUser(currentUser);
+                    
+                    // Qo'shimcha ma'lumotlarni saqlash
+                    localStorage.setItem(`userDetails_${currentUser.id}`, JSON.stringify(userDetails));
+                    
+                    alert('Profil muvaffaqiyatli yangilandi!');
+                    loadUserProfile();
+                }
+            });
+            
+            // Parolni o'zgartirish
+            document.getElementById('changePasswordBtn').addEventListener('click', function() {
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmNewPassword').value;
+                
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    alert('Barcha maydonlarni to\'ldiring!');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    alert('Yangi parol kamida 6 belgidan iborat bo\'lishi kerak!');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    alert('Yangi parollar mos kelmadi!');
+                    return;
+                }
+                
+                if (currentUser.password !== currentPassword) {
+                    alert('Joriy parol noto\'g\'ri!');
+                    return;
+                }
+                
+                // Parolni yangilash
+                const users = Storage.getUsers();
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex].password = newPassword;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Current user ni yangilash
+                    currentUser.password = newPassword;
+                    Auth.setCurrentUser(currentUser);
+                    
+                    alert('Parol muvaffaqiyatli o\'zgartirildi!');
+                    
+                    // Maydonlarni tozalash
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmNewPassword').value = '';
+                }
+            });
+            
+            // Hisobni o'chirish
+            document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+                if (confirm('Haqiqatan ham hisobingizni o\'chirib tashlamoqchimisiz? Bu amalni bekor qilib bo\'lmaydi!')) {
+                    // Foydalanuvchini o'chirish
+                    const users = Storage.getUsers();
+                    const filteredUsers = users.filter(u => u.id !== currentUser.id);
+                    localStorage.setItem('users', JSON.stringify(filteredUsers));
+                    
+                    // Chiqish
+                    Auth.logout();
+                    alert('Hisobingiz muvaffaqiyatli o\'chirildi!');
+                    window.location.href = 'index.html';
+                }
+            });
+            
+            // Sozlamalarni saqlash
+            document.getElementById('settingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userSettings = {
+                    notifyEmail: document.getElementById('notifyEmail').checked,
+                    notifySMS: document.getElementById('notifySMS').checked,
+                    notifyPromo: document.getElementById('notifyPromo').checked
+                };
+                
+                localStorage.setItem(`userSettings_${currentUser.id}`, JSON.stringify(userSettings));
+                alert('Sozlamalar saqlandi!');
+            });
+            
+            // Yangilash tugmasi
+            document.getElementById('refreshBookings').addEventListener('click', function() {
+                loadBookings();
+            });
+            
+            // Qidiruv
+            document.getElementById('searchBookings').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredBookings = allBookings.filter(booking => {
+                    const bus = Storage.getBuses().find(b => b.id === booking.busId);
+                    return (
+                        booking.ticketId.toLowerCase().includes(searchTerm) ||
+                        (bus && (
+                            bus.from.toLowerCase().includes(searchTerm) ||
+                            bus.to.toLowerCase().includes(searchTerm)
+                        ))
+                    );
+                });
+                
+                displayBookings(filteredBookings, Storage.getBuses());
+            });
+        }
+        
+        function viewTicketDetails(bookingId) {
+            const booking = allBookings.find(b => b.id == bookingId);
+            const bus = Storage.getBuses().find(b => b.id === booking.busId);
+            
+            if (booking && bus) {
+                // Chipta ma'lumotlarini modalda ko'rsatish
+                const modalHTML = `
+                    <div class="modal fade" id="ticketModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title"><i class="fas fa-ticket-alt"></i> Chipta ma'lumotlari</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="ticket p-3">
+                                        <h4 class="text-center mb-4">ONLINE CHIPTA</h4>
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <h5>${bus.from}</h5>
+                                                <p>${bus.date} | ${bus.departureTime}</p>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <h5>${bus.to}</h5>
+                                                <p>${bus.date} | ${bus.arrivalTime}</p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Chipta ID:</strong> ${booking.ticketId}</p>
+                                                <p><strong>Yo'lovchi:</strong> ${currentUser.name}</p>
+                                                <p><strong>O'rindiqlar:</strong> ${booking.seats.join(', ')}</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Avtobus:</strong> ${bus.busNumber}</p>
+                                                <p><strong>Narx:</strong> ${booking.totalPrice.toLocaleString()} so'm</p>
+                                                <p><strong>Holati:</strong> ${booking.status === 'confirmed' ? 'Tasdiqlangan' : 'Bekor qilingan'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.print()">
+                                        <i class="fas fa-print"></i> Chop etish
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Modalni o'rnatish
+                const modalContainer = document.createElement('div');
+                modalContainer.innerHTML = modalHTML;
+                document.body.appendChild(modalContainer);
+                
+                // Modalni ko'rsatish
+                const modal = new bootstrap.Modal(document.getElementById('ticketModal'));
+                modal.show();
+                
+                // Modal yopilganda o'chirish
+                document.getElementById('ticketModal').addEventListener('hidden.bs.modal', function() {
+                    modalContainer.remove();
+                });
+            }
+        }
+        
+        function showCancelModal(bookingId) {
+            const booking = allBookings.find(b => b.id == bookingId);
+            const bus = Storage.getBuses().find(b => b.id === booking.busId);
+            
+            if (booking && bus) {
+                currentBookingToCancel = booking;
+                
+                document.getElementById('cancelTicketId').textContent = booking.ticketId;
+                document.getElementById('cancelRoute').textContent = `${bus.from} → ${bus.to}`;
+                document.getElementById('cancelDate').textContent = `${bus.date} ${bus.departureTime}`;
+                
+                const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+                modal.show();
+            }
+        }
+        
+        // Bekor qilishni tasdiqlash
+        document.getElementById('confirmCancelBtn').addEventListener('click', function() {
+            if (currentBookingToCancel) {
+                // Booking holatini o'zgartirish
+                const bookings = Storage.getBookings();
+                const bookingIndex = bookings.findIndex(b => b.id === currentBookingToCancel.id);
+                
+                if (bookingIndex !== -1) {
+                    bookings[bookingIndex].status = 'cancelled';
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                    
+                    // O'rindiqlarni bo'shatish
+                    const bus = Storage.getBuses().find(b => b.id === currentBookingToCancel.busId);
+                    if (bus) {
+                        const updatedBus = {
+                            ...bus,
+                            availableSeats: bus.availableSeats + currentBookingToCancel.seats.length
+                        };
+                        Storage.updateBus(bus.id, updatedBus);
+                    }
+                    
+                    // Modalni yopish
+                    bootstrap.Modal.getInstance(document.getElementById('cancelModal')).hide();
+                    
+                    // Yangilash
+                    loadBookings();
+                    
+                    alert('Bron muvaffaqiyatli bekor qilindi!');
+                }
+                
+                currentBookingToCancel = null;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+/* Umumiy stil */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.hero-section h1 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Features */
+.feature-icon {
+    margin-bottom: 1rem;
+    transition: transform 0.3s;
+}
+
+.feature-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Kartalar */
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Tugmalar */
+.btn {
+    border-radius: 25px;
+    padding: 10px 25px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-lg {
+    border-radius: 30px;
+    padding: 15px 35px;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #4776E6, #8E54E9);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #3B69D1, #7E47D8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-success {
+    background: linear-gradient(to right, #00b09b, #96c93d);
+    border: none;
+}
+
+/* Formalar */
+.form-control {
+    border-radius: 10px;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #4776E6;
+    box-shadow: 0 0 0 0.2rem rgba(71, 118, 230, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #555;
+}
+
+/* O'rindiq tanlash */
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.seat {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    user-select: none;
+}
+
+.seat.available {
+    background-color: #d4edda;
+    color: #155724;
+    border: 2px solid #c3e6cb;
+}
+
+.seat.selected {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 2px solid #b8daff;
+    transform: scale(1.1);
+}
+
+.seat.booked {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 2px solid #f5c6cb;
+    cursor: not-allowed;
+}
+
+.seat.driver {
+    background-color: #6c757d;
+    color: white;
+    cursor: default;
+}
+
+/* Chipta dizayni */
+.ticket {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.ticket::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: repeating-linear-gradient(
+        transparent,
+        transparent 10px,
+        #999 10px,
+        #999 12px
+    );
+}
+
+/* Admin panel */
+.admin-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+}
+
+.admin-card i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+/* Statistikalar */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+/* Navbar dropdown */
+.dropdown-menu {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Alert'lar */
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Responsive dizayn */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .seat-map {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .seat {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 576px) {
+    .seat-map {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .ticket::before {
+        display: none;
+    }
+}
+
+/* Animationlar */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Yuklash animatsiyasi */
+.loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4776E6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

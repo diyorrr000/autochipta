@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avtobus tanlash - Online Chipta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="search.html">
+                    <i class="fas fa-search"></i> Qidirish
+                </a>
+                <a class="nav-link" href="profile.html">
+                    <i class="fas fa-user"></i> Profil
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow fade-in">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-bus"></i> Mavjud avtobuslar</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="busList"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Qidiruv parametrlari</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="searchParams">
+                            <p>Qidiruv natijalari yuklanmoqda...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Maslahatlar</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success"></i> Avval o'rindiqlarni tekshiring</li>
+                            <li class="mb-2"><i class="fas fa-check text-success"></i> Lyuks avtobuslar qulayroq</li>
+                            <li class="mb-2"><i class="fas fa-check text-success"></i> Ertalabki reyslar kamtarib</li>
+                            <li><i class="fas fa-check text-success"></i> Tezkor bron qilishni unutmang</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL parametrlarini olish
+            const urlParams = new URLSearchParams(window.location.search);
+            const busId = urlParams.get('id');
+            const from = urlParams.get('from');
+            const to = urlParams.get('to');
+            const passengers = urlParams.get('passengers') || 1;
+            
+            // Qidiruv parametrlarini ko'rsatish
+            const searchParams = document.getElementById('searchParams');
+            searchParams.innerHTML = `
+                <p><strong>Qayerdan:</strong> ${from || 'Tanlanmagan'}</p>
+                <p><strong>Qayerga:</strong> ${to || 'Tanlanmagan'}</p>
+                <p><strong>Yo'lovchilar:</strong> ${passengers} kishi</p>
+                <hr>
+                <a href="search.html" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-edit"></i> O'zgartirish
+                </a>
+            `;
+            
+            // Avtobuslarni yuklash
+            loadBuses(from, to, busId, passengers);
+            
+            // Foydalanuvchi tekshiruvi
+            if (!Auth.isAuthenticated()) {
+                const busList = document.getElementById('busList');
+                busList.innerHTML = `
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Diqqat!</h5>
+                        <p>Avtobus bron qilish uchun tizimga kiring yoki ro'yxatdan o'ting.</p>
+                        <div class="mt-3">
+                            <a href="login.html" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Kirish
+                            </a>
+                            <a href="register.html" class="btn btn-outline-primary ms-2">
+                                <i class="fas fa-user-plus"></i> Ro'yxatdan o'tish
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        function loadBuses(from, to, specificBusId, passengers) {
+            const buses = Storage.getBuses();
+            const busList = document.getElementById('busList');
+            let filteredBuses = buses;
+            
+            // Filtrlash
+            if (from && to) {
+                filteredBuses = buses.filter(bus => 
+                    bus.from === from && bus.to === to
+                );
+            } else if (specificBusId) {
+                filteredBuses = buses.filter(bus => bus.id == specificBusId);
+            }
+            
+            if (filteredBuses.length === 0) {
+                busList.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        Uzr, tanlangan parametrlar bo'yicha avtobus topilmadi.
+                        <a href="search.html" class="alert-link">Boshqa yo'nalish qidiring</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Avtobus kartalarini chizish
+            busList.innerHTML = '';
+            filteredBuses.forEach(bus => {
+                const busCard = document.createElement('div');
+                busCard.className = 'card mb-4';
+                busCard.innerHTML = `
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h5 class="card-title mb-1">${bus.from} → ${bus.to}</h5>
+                                        <p class="text-muted small mb-2">
+                                            <i class="fas fa-calendar"></i> ${bus.date} | 
+                                            <i class="fas fa-building"></i> ${bus.company || 'Online Chipta'}
+                                        </p>
+                                    </div>
+                                    <span class="badge ${bus.busType === 'Lyuks' ? 'bg-success' : 'bg-primary'}">
+                                        ${bus.busType}
+                                    </span>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <p class="mb-1">
+                                            <i class="fas fa-clock text-primary"></i> 
+                                            <strong>${bus.departureTime}</strong>
+                                        </p>
+                                        <small class="text-muted">Ketish vaqti</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="mb-1">
+                                            <i class="fas fa-clock text-success"></i> 
+                                            <strong>${bus.arrivalTime}</strong>
+                                        </p>
+                                        <small class="text-muted">Yetib borish</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <p class="mb-2">
+                                        <i class="fas fa-bus"></i> <strong>${bus.busNumber}</strong>
+                                        <span class="ms-3">
+                                            <i class="fas fa-chair"></i> 
+                                            ${bus.availableSeats} ta joy bor (Jami: ${bus.totalSeats})
+                                        </span>
+                                    </p>
+                                    
+                                    <div class="progress mb-3" style="height: 10px;">
+                                        <div class="progress-bar ${bus.availableSeats < 10 ? 'bg-danger' : bus.availableSeats < 20 ? 'bg-warning' : 'bg-success'}" 
+                                             style="width: ${(bus.availableSeats / bus.totalSeats) * 100}%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 text-end">
+                                <div class="mb-3">
+                                    <h3 class="text-success">${bus.price.toLocaleString()} so'm</h3>
+                                    <small class="text-muted">1 kishi uchun</small>
+                                </div>
+                                
+                                ${bus.availableSeats >= passengers ? `
+                                    <button class="btn btn-primary btn-lg w-100 book-btn" 
+                                            data-bus-id="${bus.id}" 
+                                            data-passengers="${passengers}">
+                                        <i class="fas fa-ticket-alt"></i> O'rindiq tanlash
+                                    </button>
+                                ` : `
+                                    <button class="btn btn-danger btn-lg w-100" disabled>
+                                        <i class="fas fa-times-circle"></i> Joylar yetarli emas
+                                    </button>
+                                `}
+                                
+                                <p class="mt-2 small text-muted">
+                                    <i class="fas fa-shield-alt"></i> 100% xavfsiz to'lov
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                busList.appendChild(busCard);
+            });
+            
+            // Book tugmalariga event listener qo'shish
+            document.querySelectorAll('.book-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const busId = this.getAttribute('data-bus-id');
+                    const passengers = this.getAttribute('data-passengers');
+                    
+                    if (!Auth.isAuthenticated()) {
+                        alert('Iltimos, avval tizimga kiring!');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    // O'rindiq tanlash sahifasiga o'tish
+                    window.location.href = `seats.html?busId=${busId}&passengers=${passengers}`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>

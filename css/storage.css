@@ -1,0 +1,231 @@
+/**
+ * LocalStorage boshqaruvchi funksiyalar
+ */
+
+// Users ma'lumotlari
+const Storage = {
+    // Foydalanuvchilar
+    getUsers: function() {
+        return JSON.parse(localStorage.getItem('users')) || [];
+    },
+    
+    saveUser: function(user) {
+        const users = this.getUsers();
+        user.id = users.length + 1;
+        user.createdAt = new Date().toISOString();
+        users.push(user);
+        localStorage.setItem('users', JSON.stringify(users));
+        return user;
+    },
+    
+    findUserByEmail: function(email) {
+        const users = this.getUsers();
+        return users.find(user => user.email === email);
+    },
+    
+    // Avtobuslar
+    getBuses: function() {
+        return JSON.parse(localStorage.getItem('buses')) || [];
+    },
+    
+    saveBus: function(bus) {
+        const buses = this.getBuses();
+        bus.id = buses.length + 1;
+        bus.availableSeats = bus.totalSeats || 45;
+        bus.date = bus.date || new Date().toISOString().split('T')[0];
+        buses.push(bus);
+        localStorage.setItem('buses', JSON.stringify(buses));
+        return bus;
+    },
+    
+    updateBus: function(busId, updatedData) {
+        const buses = this.getBuses();
+        const index = buses.findIndex(bus => bus.id === busId);
+        if (index !== -1) {
+            buses[index] = { ...buses[index], ...updatedData };
+            localStorage.setItem('buses', JSON.stringify(buses));
+            return true;
+        }
+        return false;
+    },
+    
+    deleteBus: function(busId) {
+        const buses = this.getBuses();
+        const filteredBuses = buses.filter(bus => bus.id !== busId);
+        localStorage.setItem('buses', JSON.stringify(filteredBuses));
+        return true;
+    },
+    
+    searchBuses: function(from, to, date) {
+        const buses = this.getBuses();
+        return buses.filter(bus => {
+            const matchesFrom = !from || bus.from.toLowerCase().includes(from.toLowerCase());
+            const matchesTo = !to || bus.to.toLowerCase().includes(to.toLowerCase());
+            const matchesDate = !date || bus.date === date;
+            return matchesFrom && matchesTo && matchesDate;
+        });
+    },
+    
+    // Bronlar
+    getBookings: function() {
+        return JSON.parse(localStorage.getItem('bookings')) || [];
+    },
+    
+    saveBooking: function(booking) {
+        const bookings = this.getBookings();
+        booking.id = bookings.length + 1;
+        booking.bookingDate = new Date().toISOString();
+        booking.status = 'confirmed';
+        bookings.push(booking);
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+        
+        // Avtobusda joylar sonini kamaytirish
+        this.updateBusSeats(booking.busId, booking.seats.length);
+        
+        return booking;
+    },
+    
+    getUserBookings: function(userId) {
+        const bookings = this.getBookings();
+        return bookings.filter(booking => booking.userId === userId);
+    },
+    
+    // O'rindiqlar
+    getSeats: function(busId) {
+        const allSeats = JSON.parse(localStorage.getItem('seats')) || [];
+        return allSeats.filter(seat => seat.busId === busId);
+    },
+    
+    saveSeats: function(seats) {
+        const allSeats = JSON.parse(localStorage.getItem('seats')) || [];
+        seats.forEach(seat => {
+            seat.id = allSeats.length + 1;
+            allSeats.push(seat);
+        });
+        localStorage.setItem('seats', JSON.stringify(allSeats));
+    },
+    
+    bookSeats: function(busId, seatNumbers) {
+        const allSeats = JSON.parse(localStorage.getItem('seats')) || [];
+        seatNumbers.forEach(seatNumber => {
+            const seat = {
+                id: allSeats.length + 1,
+                busId: busId,
+                seatNumber: seatNumber,
+                status: 'booked',
+                bookedAt: new Date().toISOString()
+            };
+            allSeats.push(seat);
+        });
+        localStorage.setItem('seats', JSON.stringify(allSeats));
+    },
+    
+    // Yordamchi funksiyalar
+    updateBusSeats: function(busId, bookedSeatsCount) {
+        const buses = this.getBuses();
+        const busIndex = buses.findIndex(bus => bus.id === busId);
+        if (busIndex !== -1) {
+            buses[busIndex].availableSeats -= bookedSeatsCount;
+            localStorage.setItem('buses', JSON.stringify(buses));
+        }
+    },
+    
+    // Joriy foydalanuvchi
+    getCurrentUser: function() {
+        return JSON.parse(localStorage.getItem('currentUser'));
+    },
+    
+    setCurrentUser: function(user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+    },
+    
+    clearCurrentUser: function() {
+        localStorage.removeItem('currentUser');
+    },
+    
+    // Ma'lumotlarni tozalash (faqat test uchun)
+    clearAll: function() {
+        localStorage.clear();
+    },
+    
+    // Demo ma'lumotlarni yuklash
+    loadDemoData: function() {
+        if (!localStorage.getItem('buses')) {
+            const demoBuses = [
+                {
+                    id: 1,
+                    from: "Toshkent",
+                    to: "Samarqand",
+                    departureTime: "08:00",
+                    arrivalTime: "12:00",
+                    price: 50000,
+                    totalSeats: 45,
+                    availableSeats: 45,
+                    busNumber: "01A123BC",
+                    busType: "Lyuks",
+                    date: "2024-12-15",
+                    company: "Express Bus"
+                },
+                {
+                    id: 2,
+                    from: "Toshkent",
+                    to: "Buxoro",
+                    departureTime: "10:00",
+                    arrivalTime: "16:00",
+                    price: 80000,
+                    totalSeats: 40,
+                    availableSeats: 40,
+                    busNumber: "02D456EF",
+                    busType: "Standart",
+                    date: "2024-12-15",
+                    company: "Sharq Travel"
+                },
+                {
+                    id: 3,
+                    from: "Samarqand",
+                    to: "Buxoro",
+                    departureTime: "14:00",
+                    arrivalTime: "18:00",
+                    price: 40000,
+                    totalSeats: 45,
+                    availableSeats: 45,
+                    busNumber: "03G789HI",
+                    busType: "Lyuks",
+                    date: "2024-12-15",
+                    company: "Lazgi Bus"
+                }
+            ];
+            
+            const demoUsers = [
+                {
+                    id: 1,
+                    name: "Admin User",
+                    email: "admin@example.com",
+                    password: "12345",
+                    phone: "+998901234567",
+                    role: "admin",
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 2,
+                    name: "Ali Valiyev",
+                    email: "ali@example.com",
+                    password: "ali123",
+                    phone: "+998901112233",
+                    role: "user",
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            localStorage.setItem('buses', JSON.stringify(demoBuses));
+            localStorage.setItem('users', JSON.stringify(demoUsers));
+            localStorage.setItem('bookings', JSON.stringify([]));
+            localStorage.setItem('seats', JSON.stringify([]));
+        }
+    }
+};
+
+// Sahifa yuklanganda demo ma'lumotlarni yuklash
+document.addEventListener('DOMContentLoaded', function() {
+    Storage.loadDemoData();
+});

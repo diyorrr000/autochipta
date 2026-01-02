@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Avtobus Chiptalari</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- O'z CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Bosh sahifa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html">Chipta qidirish</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Kirish</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Ro'yxatdan o'tish</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-login.html">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Avtobus chiptalarini onlayn bron qiling</h1>
+                    <p class="lead">Tez, qulay va xavfsiz yo'l sayohati. 100+ yo'nalish, har kuni yangi reyslar.</p>
+                    <a href="search.html" class="btn btn-success btn-lg">
+                        <i class="fas fa-search"></i> Chipta qidirish
+                    </a>
+                    <a href="register.html" class="btn btn-outline-primary btn-lg ms-2">
+                        <i class="fas fa-user-plus"></i> Ro'yxatdan o'tish
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Avtobus" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Nega bizni tanlashadi?</h2>
+            <div class="row text-center">
+                <div class="col-md-3 mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt fa-3x text-primary"></i>
+                    </div>
+                    <h4>Tez bron</h4>
+                    <p>1 daqiqada chipta bron qiling</p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt fa-3x text-success"></i>
+                    </div>
+                    <h4>Xavfsiz</h4>
+                    <p>Ma'lumotlaringiz himoyalangan</p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset fa-3x text-warning"></i>
+                    </div>
+                    <h4>Qo'llab-quvvatlash</h4>
+                    <p>24/7 mijozlar xizmati</p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags fa-3x text-danger"></i>
+                    </div>
+                    <h4>Arzon narxlar</h4>
+                    <p>Eng yaxshi narxlarni taklif qilamiz</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Routes -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Mashhur yo'nalishlar</h2>
+            <div class="row" id="popularRoutes">
+                <!-- JavaScript bilan to'ldiriladi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Online Chipta</h5>
+                    <p>Avtobus chiptalarini onlayn bron qilish tizimi</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Aloqa</h5>
+                    <p><i class="fas fa-phone"></i> +998 90 123 45 67</p>
+                    <p><i class="fas fa-envelope"></i> info@onlinechipta.uz</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Tez havolalar</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="search.html" class="text-white">Chipta qidirish</a></li>
+                        <li><a href="profile.html" class="text-white">Profil</a></li>
+                        <li><a href="admin-login.html" class="text-white">Admin panel</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <p class="text-center mb-0">&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Demo ma'lumotlarni yuklash
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('buses')) {
+                initializeDemoData();
+            }
+            loadPopularRoutes();
+            
+            // Foydalanuvchi holatini tekshirish
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('navbarNav').innerHTML += `
+                    <div class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> ${currentUser.name}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="profile.html">Profil</a></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn">Chiqish</a></li>
+                            </ul>
+                        </li>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn')?.addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+
+        function loadPopularRoutes() {
+            const buses = JSON.parse(localStorage.getItem('buses')) || [];
+            const popular = buses.slice(0, 4);
+            const container = document.getElementById('popularRoutes');
+            
+            popular.forEach(bus => {
+                container.innerHTML += `
+                    <div class="col-md-3 mb-4">
+                        <div class="card h-100 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">${bus.from} → ${bus.to}</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-clock"></i> ${bus.departureTime}<br>
+                                    <i class="fas fa-chair"></i> ${bus.availableSeats} ta joy bor<br>
+                                    <i class="fas fa-tag"></i> ${bus.price} so'm
+                                </p>
+                                <a href="buses.html?from=${bus.from}&to=${bus.to}" class="btn btn-primary">Bron qilish</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function initializeDemoData() {
+            const demoBuses = [
+                {
+                    id: 1,
+                    from: "Toshkent",
+                    to: "Samarqand",
+                    departureTime: "08:00",
+                    arrivalTime: "12:00",
+                    price: 50000,
+                    totalSeats: 45,
+                    availableSeats: 45,
+                    busNumber: "01A123BC",
+                    busType: "Lyuks",
+                    date: "2024-12-15"
+                },
+                {
+                    id: 2,
+                    from: "Toshkent",
+                    to: "Buxoro",
+                    departureTime: "10:00",
+                    arrivalTime: "16:00",
+                    price: 80000,
+                    totalSeats: 40,
+                    availableSeats: 40,
+                    busNumber: "02D456EF",
+                    busType: "Standart",
+                    date: "2024-12-15"
+                },
+                {
+                    id: 3,
+                    from: "Samarqand",
+                    to: "Buxoro",
+                    departureTime: "14:00",
+                    arrivalTime: "18:00",
+                    price: 40000,
+                    totalSeats: 45,
+                    availableSeats: 45,
+                    busNumber: "03G789HI",
+                    busType: "Lyuks",
+                    date: "2024-12-15"
+                },
+                {
+                    id: 4,
+                    from: "Buxoro",
+                    to: "Xiva",
+                    departureTime: "09:00",
+                    arrivalTime: "13:00",
+                    price: 35000,
+                    totalSeats: 40,
+                    availableSeats: 40,
+                    busNumber: "04J012KL",
+                    busType: "Standart",
+                    date: "2024-12-15"
+                }
+            ];
+            
+            localStorage.setItem('buses', JSON.stringify(demoBuses));
+            localStorage.setItem('users', JSON.stringify([]));
+            localStorage.setItem('bookings', JSON.stringify([]));
+            localStorage.setItem('seats', JSON.stringify([]));
+        }
+    </script>
+</body>
+</html>

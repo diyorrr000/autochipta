@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'rindiq tanlash - Online Chipta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-link" id="selectedSeatsInfo">
+                    <i class="fas fa-chair"></i> Tanlangan: <span id="selectedCount">0</span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow fade-in">
+                    <div class="card-header bg-success text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0"><i class="fas fa-chair"></i> O'rindiq tanlash</h4>
+                            <div id="busInfoHeader">
+                                Yuklanmoqda...
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Avtobus dizayni -->
+                        <div class="text-center mb-5">
+                            <div class="bus-front mb-4">
+                                <div class="driver-seat p-3 bg-secondary text-white rounded d-inline-block">
+                                    <i class="fas fa-user-tie fa-2x"></i>
+                                    <div class="small">Haydovchi</div>
+                                </div>
+                            </div>
+                            
+                            <div class="seat-map" id="seatMap">
+                                <!-- O'rindiqlar JavaScript bilan yuklanadi -->
+                            </div>
+                            
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-center gap-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="seat available me-2"></div>
+                                        <span>Bo'sh</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="seat selected me-2"></div>
+                                        <span>Tanlangan</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="seat booked me-2"></div>
+                                        <span>Band</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card shadow sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-shopping-cart"></i> Sizning tanlovlaringiz</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="busDetails">
+                            <p class="text-center"><i class="fas fa-spinner fa-spin"></i> Yuklanmoqda...</p>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h6>Tanlangan o'rindiqlar:</h6>
+                            <div id="selectedSeatsList" class="mb-3">
+                                <p class="text-muted small">O'rindiq tanlanmagan</p>
+                            </div>
+                            
+                            <div class="border-top pt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Chipta narxi:</span>
+                                    <span id="ticketPrice">0 so'm</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Xizmat haqi:</span>
+                                    <span>2,000 so'm</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Jami yo'lovchilar:</span>
+                                    <span id="totalPassengers">0 kishi</span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-2">
+                                    <span>Umumiy summa:</span>
+                                    <span id="totalAmount">0 so'm</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-success btn-lg w-100" id="continueBtn" disabled>
+                                <i class="fas fa-arrow-right"></i> Davom etish
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm w-100 mt-2" id="resetBtn">
+                                <i class="fas fa-redo"></i> Tanlovni bekor qilish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let selectedSeats = [];
+        let busData = null;
+        let passengersCount = 1;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL parametrlarini olish
+            const urlParams = new URLSearchParams(window.location.search);
+            const busId = urlParams.get('busId');
+            passengersCount = parseInt(urlParams.get('passengers')) || 1;
+            
+            // Foydalanuvchi tekshiruvi
+            if (!Auth.isAuthenticated()) {
+                alert('Iltimos, avval tizimga kiring!');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Avtobus ma'lumotlarini olish
+            const buses = Storage.getBuses();
+            busData = buses.find(bus => bus.id == busId);
+            
+            if (!busData) {
+                alert('Avtobus topilmadi!');
+                window.location.href = 'search.html';
+                return;
+            }
+            
+            // Avtobus ma'lumotlarini ko'rsatish
+            displayBusInfo();
+            
+            // O'rindiqlarni yaratish
+            createSeatMap();
+            
+            // Tanlangan o'rindiqlarni yangilash
+            updateSelectedSeatsInfo();
+        });
+        
+        function displayBusInfo() {
+            document.getElementById('busInfoHeader').innerHTML = `
+                ${busData.from} → ${busData.to} | ${busData.departureTime}
+            `;
+            
+            document.getElementById('busDetails').innerHTML = `
+                <h6>${busData.from} → ${busData.to}</h6>
+                <p class="mb-1">
+                    <i class="fas fa-calendar"></i> ${busData.date}<br>
+                    <i class="fas fa-clock"></i> ${busData.departureTime} - ${busData.arrivalTime}<br>
+                    <i class="fas fa-bus"></i> ${busData.busNumber} (${busData.busType})<br>
+                    <i class="fas fa-tag"></i> 1 kishi: ${busData.price.toLocaleString()} so'm
+                </p>
+                <p class="text-success small mb-0">
+                    <i class="fas fa-check-circle"></i> ${busData.availableSeats} ta joy bor
+                </p>
+            `;
+            
+            // Yo'lovchilar sonini ko'rsatish
+            document.getElementById('totalPassengers').textContent = `${passengersCount} kishi`;
+        }
+        
+        function createSeatMap() {
+            const seatMap = document.getElementById('seatMap');
+            seatMap.innerHTML = '';
+            
+            // Avtobus o'rindiq sxemasi: 4 qator, har qatorda 11 ta o'rindiq (oxirgi qator 7 ta)
+            const totalSeats = busData.totalSeats || 45;
+            const seatsPerRow = 11;
+            const rows = Math.ceil(totalSeats / seatsPerRow);
+            
+            // Band qilingan o'rindiqlarni olish
+            const bookedSeats = Storage.getSeats(busData.id);
+            const bookedSeatNumbers = bookedSeats.map(seat => seat.seatNumber);
+            
+            let seatNumber = 1;
+            
+            for (let row = 1; row <= rows; row++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row justify-content-center mb-3';
+                
+                // Har bir qatordagi o'rindiqlar soni
+                const seatsInThisRow = (row === rows) ? (totalSeats - ((rows-1) * seatsPerRow)) : seatsPerRow;
+                
+                for (let col = 1; col <= seatsInThisRow; col++) {
+                    const seatDiv = document.createElement('div');
+                    seatDiv.className = 'col-auto';
+                    
+                    const seatButton = document.createElement('div');
+                    seatButton.className = 'seat available';
+                    seatButton.textContent = seatNumber;
+                    seatButton.dataset.seatNumber = seatNumber;
+                    
+                    // Band o'rindiqlarni belgilash
+                    if (bookedSeatNumbers.includes(seatNumber.toString())) {
+                        seatButton.className = 'seat booked';
+                        seatButton.title = 'Band';
+                    } else if (seatNumber === 1) {
+                        // Birinchi o'rindiq haydovchi uchun
+                        seatButton.className = 'seat driver';
+                        seatButton.innerHTML = '<i class="fas fa-user-tie"></i>';
+                        seatButton.title = 'Haydovchi';
+                    } else {
+                        // Bo'sh o'rindiqlarga click event
+                        seatButton.addEventListener('click', function() {
+                            toggleSeatSelection(this);
+                        });
+                    }
+                    
+                    // 2 va 3-o'rindiqlar orasida yo'l
+                    if (col === 3) {
+                        const aisle = document.createElement('div');
+                        aisle.className = 'col-auto d-flex align-items-center';
+                        aisle.style.width = '40px';
+                        rowDiv.appendChild(aisle);
+                    }
+                    
+                    seatDiv.appendChild(seatButton);
+                    rowDiv.appendChild(seatDiv);
+                    seatNumber++;
+                }
+                
+                seatMap.appendChild(rowDiv);
+            }
+        }
+        
+        function toggleSeatSelection(seatElement) {
+            const seatNumber = seatElement.dataset.seatNumber;
+            const index = selectedSeats.indexOf(seatNumber);
+            
+            if (index === -1) {
+                // O'rindiq tanlash
+                if (selectedSeats.length >= passengersCount) {
+                    alert(`Siz faqat ${passengersCount} ta o'rindiq tanlashingiz mumkin!`);
+                    return;
+                }
+                selectedSeats.push(seatNumber);
+                seatElement.classList.remove('available');
+                seatElement.classList.add('selected');
+            } else {
+                // O'rindiqni bekor qilish
+                selectedSeats.splice(index, 1);
+                seatElement.classList.remove('selected');
+                seatElement.classList.add('available');
+            }
+            
+            updateSelectedSeatsInfo();
+        }
+        
+        function updateSelectedSeatsInfo() {
+            // Sarlavhadagi hisobni yangilash
+            document.getElementById('selectedCount').textContent = selectedSeats.length;
+            
+            // Tanlangan o'rindiqlar ro'yxati
+            const seatsList = document.getElementById('selectedSeatsList');
+            if (selectedSeats.length > 0) {
+                seatsList.innerHTML = selectedSeats.map(seat => 
+                    `<span class="badge bg-primary me-1 mb-1">${seat}</span>`
+                ).join('');
+            } else {
+                seatsList.innerHTML = '<p class="text-muted small">O\'rindiq tanlanmagan</p>';
+            }
+            
+            // Narxlarni hisoblash
+            const ticketPrice = selectedSeats.length * busData.price;
+            const serviceFee = 2000;
+            const totalAmount = ticketPrice + serviceFee;
+            
+            document.getElementById('ticketPrice').textContent = ticketPrice.toLocaleString() + ' so\'m';
+            document.getElementById('totalAmount').textContent = totalAmount.toLocaleString() + ' so\'m';
+            
+            // Davom etish tugmasini faollashtirish
+            const continueBtn = document.getElementById('continueBtn');
+            if (selectedSeats.length === passengersCount) {
+                continueBtn.disabled = false;
+                continueBtn.addEventListener('click', proceedToBooking);
+            } else {
+                continueBtn.disabled = true;
+                continueBtn.removeEventListener('click', proceedToBooking);
+            }
+        }
+        
+        function proceedToBooking() {
+            if (selectedSeats.length !== passengersCount) {
+                alert(`Iltimos, ${passengersCount} ta o'rindiq tanlang!`);
+                return;
+            }
+            
+            // Ma'lumotlarni localStorage'ga vaqtincha saqlash
+            const bookingData = {
+                busId: busData.id,
+                seats: selectedSeats,
+                totalPrice: (selectedSeats.length * busData.price) + 2000,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('pendingBooking', JSON.stringify(bookingData));
+            
+            // Chipta sahifasiga o'tish
+            window.location.href = 'ticket.html';
+        }
+        
+        // Reset tugmasi
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            selectedSeats = [];
+            
+            // Barcha tanlangan o'rindiqlarni tiklash
+            document.querySelectorAll('.seat.selected').forEach(seat => {
+                seat.classList.remove('selected');
+                seat.classList.add('available');
+            });
+            
+            updateSelectedSeatsInfo();
+        });
+    </script>
+</body>
+</html>

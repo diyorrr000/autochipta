@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirish - Online Chipta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-bus"></i> Online Chipta
+            </a>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow fade-in">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-sign-in-alt"></i> Tizimga kirish</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email manzil</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" required
+                                           placeholder="email@example.com">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Parol</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" required>
+                                </div>
+                                <div class="form-text">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#forgotModal">
+                                        Parolni unutdingizmi?
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember">
+                                <label class="form-check-label" for="remember">
+                                    Eslab qolish
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt"></i> Kirish
+                                </button>
+                                
+                                <div class="text-center my-3">
+                                    <span class="text-muted">Yoki</span>
+                                </div>
+                                
+                                <a href="admin-login.html" class="btn btn-outline-warning">
+                                    <i class="fas fa-user-shield"></i> Admin sifatida kirish
+                                </a>
+                                
+                                <a href="register.html" class="btn btn-outline-secondary">
+                                    <i class="fas fa-user-plus"></i> Yangi hisob ochish
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p class="mb-0">
+                            Hisobingiz yo'qmi? 
+                            <a href="register.html">Ro'yxatdan o'ting</a>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Demo foydalanuvchi ma'lumotlari -->
+                <div class="card mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0"><i class="fas fa-info-circle"></i> Demo ma'lumotlar</h6>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Oddiy foydalanuvchi:</strong></p>
+                        <p>Email: ali@example.com<br>Parol: ali123</p>
+                        
+                        <p><strong>Admin:</strong></p>
+                        <p>Email: admin@example.com<br>Parol: 12345</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Parolni tiklash</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Parolingizni unutdingizmi? Iltimos, administrator bilan bog'laning.</p>
+                    <p><i class="fas fa-phone"></i> +998 90 123 45 67</p>
+                    <p><i class="fas fa-envelope"></i> support@onlinechipta.uz</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Online Chipta. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            try {
+                const user = Auth.login(email, password);
+                
+                if (user.role === 'admin') {
+                    alert('Admin sifatida kirdingiz!');
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    alert('Muvaffaqiyatli kirdingiz!');
+                    window.location.href = 'profile.html';
+                }
+            } catch (error) {
+                alert('Xato: ' + error.message);
+            }
+        });
+        
+        // Eslab qolish funksiyasi
+        const rememberCheckbox = document.getElementById('remember');
+        const emailInput = document.getElementById('email');
+        
+        // Cookie'dan email ni olish
+        if (document.cookie.includes('rememberedEmail')) {
+            const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                if (cookie.includes('rememberedEmail')) {
+                    const email = cookie.split('=')[1];
+                    emailInput.value = decodeURIComponent(email);
+                    rememberCheckbox.checked = true;
+                }
+            });
+        }
+        
+        // Form submit bo'lganda cookie'ga saqlash
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            if (rememberCheckbox.checked) {
+                const email = emailInput.value;
+                document.cookie = `rememberedEmail=${encodeURIComponent(email)}; max-age=${60*60*24*30}`; // 30 kun
+            } else {
+                document.cookie = "rememberedEmail=; max-age=0";
+            }
+        });
+    </script>
+</body>
+</html>
